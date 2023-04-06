@@ -20,7 +20,7 @@ export class PacmanGameComponent implements OnInit {
   wall: number = 0;
   coin: number = 1;
   road: number = 2;
-  ghost: number = 3;
+  ghost: number = 3 || 6;
   bigCoin: number = 4;
   pacman: number = 5;
 
@@ -67,6 +67,7 @@ export class PacmanGameComponent implements OnInit {
     }
 
     this.ghostService.moveGhostRandomly();
+    this.ghostService.moveBlueGhostRandomly();
   }
 
 // Move pacman based on current direction
