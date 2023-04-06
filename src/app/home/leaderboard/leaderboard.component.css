@@ -1,0 +1,17 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
+  color: white;
+}
+table{
+  background-color: #ECDBBA;
+  color: black;
+  width: 500px;
+  text-align: center;
+  padding: 20px;
+  font-size: 20px;
+  margin-top: 50px;
+  margin-bottom: 50px;
+}

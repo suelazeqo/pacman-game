@@ -6,7 +6,18 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./leaderboard.component.css']
 })
 export class LeaderboardComponent implements OnInit {
-
+  players=[
+    {username:'Suela', score:'12555'},
+    {username:'Suela', score:'12555'},
+    {username:'Suela', score:'12555'},
+    {username:'Suela', score:'12555'},
+    {username:'Suela', score:'12555'},
+    {username:'Suela', score:'12555'},
+    {username:'Suela', score:'12555'},
+    {username:'Suela', score:'12555'},
+    {username:'Suela', score:'12555'},
+    {username:'Suela', score:'12555'}
+  ];
   constructor() { }
 
   ngOnInit(): void {

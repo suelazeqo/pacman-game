@@ -1,1 +1,21 @@
-<p>leaderboard works!</p>
+<div class="container">
+  <h1>Best players</h1>
+  <table>
+    <thead>
+    <tr>
+      <th>Rank</th>
+      <th>Username</th>
+      <th>Score</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr *ngFor="let player of players; let i = index">
+      <td>{{ i + 1 }}</td>
+      <td>{{ player.username }}</td>
+      <td>{{ player.score }}</td>
+    </tr>
+    </tbody>
+  </table>
+</div>
+
+
