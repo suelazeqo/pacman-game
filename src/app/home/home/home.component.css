@@ -1,8 +1,8 @@
-.container{
+.container {
   background-color: black;
 }
 
-.menu{
+.menu {
   border-bottom: 2px solid blue;
   height: 70px;
   display: flex;
@@ -20,7 +20,7 @@
   color: #000000;
   cursor: pointer;
   display: inline-block;
-  font-family: -apple-system,sans-serif;
+  font-family: -apple-system, sans-serif;
   font-size: 1.2rem;
   font-weight: 700;
   letter-spacing: -.24px;
