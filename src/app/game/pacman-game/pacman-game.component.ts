@@ -1,5 +1,6 @@
 import {Component, HostListener, OnInit} from '@angular/core';
 import {GameService} from "../../services/game.service";
+import {GhostService} from "../ghost.service";
 
 @Component({
   selector: 'app-pacman-game',
@@ -35,7 +36,9 @@ export class PacmanGameComponent implements OnInit {
   initGhostX!: number;
   initGhostY!: number;
 
-  constructor(private services: GameService) {
+
+  constructor(private services: GameService,
+              private ghostService: GhostService) {
     document.title = this.title;
     this.gameMap = services.map;
   }
@@ -62,6 +65,8 @@ export class PacmanGameComponent implements OnInit {
         }
       }
     }
+
+    this.ghostService.moveGhostRandomly();
   }
 
 // Move pacman based on current direction
@@ -151,7 +156,6 @@ export class PacmanGameComponent implements OnInit {
     }
   }
 
-
   //Moving Pacman around with arrow keys and replacing any cell with coins with an empty road
   pacmanMoved(nextX: any, nextY: any, oldX: any, oldY: any) {
     this.gameMap[nextX][nextY] = 5; // Moving Pacman around with arrow keys
@@ -172,6 +176,4 @@ export class PacmanGameComponent implements OnInit {
       this.totalScore = this.totalScore + this.eatBigCoin;
     }
   }
-
-
 }
