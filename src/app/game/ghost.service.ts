@@ -81,7 +81,6 @@ export class GhostService {
     }
   }
 
-
   // Move Blue ghost in random direction
   moveBlueGhostRandomly() {
     let nextBlueX = this.initGhostBlueX;
@@ -150,7 +149,7 @@ export class GhostService {
     this.gameMap[oldX][oldY] = nextCellValue;
   }
 
-  // Start movement interval
+  // Start Pink Ghost movement interval
   startGhostMovement() {
     if (!this.isGhostMoving) {
       this.isGhostMoving = true;
@@ -159,6 +158,8 @@ export class GhostService {
       }, this.ghostSpeed);
     }
   }
+
+  // Start Blue Ghost movement interval
   startBlueGhostMovement() {
     if (!this.isBlueGhostMoving) {
       this.isBlueGhostMoving = true;
@@ -171,9 +172,15 @@ export class GhostService {
   // Change ghost direction and start slow movement interval
   changeGhostDirection(direction: number) {
     this.ghostMove = direction;
+    this.getGhostNumber();
     this.startGhostMovement();
-
   }
+
+  //Return the ghost movement
+  getGhostNumber(): number {
+    return this.ghostMove;
+  }
+
   // Change ghost direction and start slow movement interval
   changeBlueGhostDirection(direction: number) {
     this.ghostBleMove = direction;

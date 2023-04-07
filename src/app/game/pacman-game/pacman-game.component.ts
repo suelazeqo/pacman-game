@@ -70,6 +70,11 @@ export class PacmanGameComponent implements OnInit {
     this.ghostService.moveBlueGhostRandomly();
   }
 
+  // Return the pink ghost move
+  getGhostNumber(): number {
+    return this.ghostService.getGhostNumber();
+  }
+
 // Move pacman based on current direction
   movePacman() {
     let nextX = this.initPacmanX;

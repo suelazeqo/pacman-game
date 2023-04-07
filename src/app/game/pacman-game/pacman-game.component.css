@@ -52,8 +52,8 @@
   background-size: 100% 100%;
 }
 
-.ghost-pink {
-  background-image: url("src/assets/images/ghost_pink.png");
+.ghostPink {
+  background-image: url("src/assets/images/pink-ghost-right.png");
   background-size: 100% 100%;
   background-repeat: no-repeat;
 }
