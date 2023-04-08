@@ -8,6 +8,7 @@ import { HomeComponent } from './home/home/home.component';
 import { LeaderboardComponent } from './home/leaderboard/leaderboard.component';
 import { PopupDialogComponent } from './popup/popup-dialog/popup-dialog.component';
 import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
+import {FormsModule} from "@angular/forms";
 
 @NgModule({
   declarations: [
@@ -20,7 +21,8 @@ import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
-    AppRoutingModule
+    AppRoutingModule,
+    FormsModule
   ],
   providers: [],
   bootstrap: [AppComponent]

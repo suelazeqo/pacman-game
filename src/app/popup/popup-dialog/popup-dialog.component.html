@@ -1,1 +1,6 @@
-<p>popup-dialog works!</p>
+<div class="modal-container" *ngIf="visible">
+  <div class="modal-backdrop"></div>
+  <div class="modal-dialog">
+    <ng-content></ng-content>
+  </div>
+</div>

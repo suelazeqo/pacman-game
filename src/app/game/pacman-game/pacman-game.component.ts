@@ -1,14 +1,16 @@
-import {Component, HostListener, OnInit} from '@angular/core';
+import {Component, ElementRef, HostListener, OnInit, ViewChild} from '@angular/core';
 import {GameService} from "../../services/game.service";
 import {GhostService} from "../ghost.service";
 import {Subscription} from "rxjs";
+import {PopupDialogComponent} from "../../popup/popup-dialog/popup-dialog.component";
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-pacman-game',
   templateUrl: './pacman-game.component.html',
   styleUrls: ['./pacman-game.component.css']
 })
-export class PacmanGameComponent implements OnInit {
+export class PacmanGameComponent implements OnInit{
 
   title = 'Pacman Game';
   totalScore: number = 0;
@@ -20,7 +22,7 @@ export class PacmanGameComponent implements OnInit {
   secondLive: boolean = false;
   thirdLive: boolean = false;
   gameOver: boolean = false;
-  username: string = '';
+  // username: string = '';
 
   //Members of map
   wall: number = 0;
@@ -43,8 +45,12 @@ export class PacmanGameComponent implements OnInit {
   isLevelFinished!: boolean;
   levelFinishedSubscription!: Subscription;
 
+  @ViewChild('modal') modal!: PopupDialogComponent;
+  username: string = '';
+
   constructor(private services: GameService,
-              private ghostService: GhostService) {
+              private ghostService: GhostService,
+              private router: Router) {
     document.title = this.title;
     this.gameMap = services.map;
   }
@@ -73,9 +79,9 @@ export class PacmanGameComponent implements OnInit {
         this.isLevelFinished = value;
         this.gameStarted = false;
         this.pacmanDies();
-
-          // this.openDialog();
-
+        setTimeout(()=>{
+          this.showModal();
+        },1000)
       }
     );
   }
@@ -219,6 +225,16 @@ export class PacmanGameComponent implements OnInit {
     } else if (step == this.bigCoin) {
       this.totalScore = this.totalScore + this.eatBigCoin;
     }
+  }
+
+  showModal() {
+    this.modal.show();
+  }
+
+  submit() {
+    this.modal.hide();
+    console.log(this.username)
+    this.router.navigate(['/'])
   }
 
 }

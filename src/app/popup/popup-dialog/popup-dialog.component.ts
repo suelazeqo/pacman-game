@@ -1,5 +1,4 @@
-import {Component, Inject, OnInit} from '@angular/core';
-import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material/dialog";
+import {Component, Input, OnInit} from '@angular/core';
 
 @Component({
   selector: 'app-popup-dialog',
@@ -8,11 +7,23 @@ import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material/dialog";
 })
 export class PopupDialogComponent implements OnInit {
 
-  constructor(
-    @Inject(MAT_DIALOG_DATA) public data: {name: string}
-  ) {}
+  constructor() {}
 
   ngOnInit(): void {
   }
+  username: string = '';
 
+  submit() {
+    // Handle the form submission here
+  }
+
+  @Input() visible: boolean = false;
+
+  show() {
+    this.visible = true;
+  }
+
+  hide() {
+    this.visible = false;
+  }
 }
