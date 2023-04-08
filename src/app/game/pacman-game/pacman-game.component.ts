@@ -1,6 +1,7 @@
 import {Component, HostListener, OnInit} from '@angular/core';
 import {GameService} from "../../services/game.service";
 import {GhostService} from "../ghost.service";
+import {Subscription} from "rxjs";
 
 @Component({
   selector: 'app-pacman-game',
@@ -12,9 +13,14 @@ export class PacmanGameComponent implements OnInit {
   title = 'Pacman Game';
   totalScore: number = 0;
   gameMap!: Array<Array<number>>;
-  gameFinished: boolean = false;
+  gameStarted: boolean = false;
   eatCoin: number = 10;
   eatBigCoin = 40;
+  lives = 3;
+  secondLive: boolean = false;
+  thirdLive: boolean = false;
+  gameOver: boolean = false;
+  username: string = '';
 
   //Members of map
   wall: number = 0;
@@ -28,14 +34,14 @@ export class PacmanGameComponent implements OnInit {
   pacmanMove: number = 2; // 1 ==> up, 2==>right, 3==>down, 4==>left
   initPacmanX!: number;
   initPacmanY!: number;
-  slowMovementInterval: any;
+  firstMovementInterval: any;
+  secondMovementInterval: any;
   isMoving: boolean = false;
   slowMovementSpeed: number = 500;
 
-  // Ghost Properties
-  initGhostX!: number;
-  initGhostY!: number;
-
+  //Ghost eat Pocman, receive information form ghost service
+  isLevelFinished!: boolean;
+  levelFinishedSubscription!: Subscription;
 
   constructor(private services: GameService,
               private ghostService: GhostService) {
@@ -56,18 +62,22 @@ export class PacmanGameComponent implements OnInit {
       }
     }
 
-    //Initial ghost coordinate
-    for (let i = 0; i < map.length; i++) {
-      for (let j = 0; j < map[i]['length']; j++) {
-        if (map[i][j] === 3) {
-          this.initGhostX = i;
-          this.initGhostY = j;
-        }
-      }
-    }
-
+    //Init ghost random movement
     this.ghostService.moveGhostRandomly();
     this.ghostService.moveBlueGhostRandomly();
+
+    //Ghost eat Pocman, receive information form ghost service
+    this.isLevelFinished = this.ghostService.getIsGameFinished();
+    this.levelFinishedSubscription = this.ghostService.gameFinished$.subscribe(
+      (value) => {
+        this.isLevelFinished = value;
+        this.gameStarted = false;
+        this.pacmanDies();
+
+          // this.openDialog();
+
+      }
+    );
   }
 
   // Return the pink ghost move
@@ -100,25 +110,31 @@ export class PacmanGameComponent implements OnInit {
     if (nextCell == this.wall) {
       // Hit a wall, stop movement
       this.stopPacman();
-    } else if (nextCell == this.ghost) {
-      this.pacmanDies();
+      // } else if (nextCell == 3 || nextCell == 6) {
+      //   this.pacmanDies();
     } else {
       // Move pacman to next cell
       this.initPacmanX = nextX;
       this.initPacmanY = nextY;
       this.pacmanMoved(nextX, nextY, oldX, oldY);
-      // this.pacmanReplaced(oldX, oldY);
       this.scoreUpdate(nextCell);
     }
   }
 
   // Start slow movement interval
-  startSlowMovement() {
+  startPocmanMovement() {
     if (!this.isMoving) {
       this.isMoving = true;
-      this.slowMovementInterval = setInterval(() => {
+      this.firstMovementInterval = setInterval(() => {
         this.movePacman();
       }, this.slowMovementSpeed);
+
+      if (this.secondLive) {
+        console.log('second interval started')
+        this.secondMovementInterval = setInterval(() => {
+          this.movePacman();
+        }, this.slowMovementSpeed);
+      }
     }
   }
 
@@ -126,12 +142,12 @@ export class PacmanGameComponent implements OnInit {
   changeDirection(direction: number) {
     this.pacmanMove = direction;
     this.stopPacman();
-    this.startSlowMovement();
+    this.startPocmanMovement();
   }
 
   // Stop all movement intervals
   stopPacman() {
-    clearInterval(this.slowMovementInterval);
+    clearInterval(this.firstMovementInterval);
     this.isMoving = false;
   }
 
@@ -141,19 +157,27 @@ export class PacmanGameComponent implements OnInit {
     switch (event.keyCode) {
       case 37: // Left Arrow Key
         this.changeDirection(4);
-        this.gameFinished = false;
+        this.gameStarted = true;
+        this.ghostService.moveGhostRandomly();
+        this.ghostService.moveBlueGhostRandomly();
         break;
       case 38: // Up Arrow Key
         this.changeDirection(1);
-        this.gameFinished = false;
+        this.gameStarted = true;
+        this.ghostService.moveGhostRandomly();
+        this.ghostService.moveBlueGhostRandomly();
         break;
       case 39: // Right Arrow Key
         this.changeDirection(2);
-        this.gameFinished = false;
+        this.gameStarted = true;
+        this.ghostService.moveGhostRandomly();
+        this.ghostService.moveBlueGhostRandomly();
         break;
       case 40: // Down Arrow Key
         this.changeDirection(3);
-        this.gameFinished = false;
+        this.gameStarted = true;
+        this.ghostService.moveGhostRandomly();
+        this.ghostService.moveBlueGhostRandomly();
         break;
       default:
         // Stop all movement if any other key is pressed
@@ -170,8 +194,22 @@ export class PacmanGameComponent implements OnInit {
 
   // If pacman meet a ghost he dies (not finished)
   pacmanDies() {
-    this.gameFinished = true;
-    this.stopPacman();
+    console.log('Pocman Dies', this.lives, 'second live : ', this.secondLive, "Game Started", this.gameStarted)
+    // Pacman Die for first time
+    this.pacmanMove = 5;
+    // this.stopPacman();
+    // Remove one live from pacman lives
+    // this.lives -= 1;
+    // // Check if there are more lives, if yes restart the game
+    // if(this.lives = 2){
+    //   this.secondLive = true;
+    // }else if(this.lives = 1){
+    //   this.thirdLive = true;
+    // }
+    // else{
+    //   this.gameOver = true;
+    // }
+    // console.log('Pocman Dies', this.lives, 'second live : ', this.secondLive)
   }
 
   //update the score by adding points for any coin and big coin
@@ -182,4 +220,5 @@ export class PacmanGameComponent implements OnInit {
       this.totalScore = this.totalScore + this.eatBigCoin;
     }
   }
+
 }

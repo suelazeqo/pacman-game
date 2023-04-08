@@ -1,5 +1,6 @@
-import { Injectable } from '@angular/core';
+import {Injectable} from '@angular/core';
 import {GameService} from "../services/game.service";
+import {Subject} from "rxjs";
 
 @Injectable({
   providedIn: 'root'
@@ -8,22 +9,23 @@ export class GhostService {
 
   wall: number = 0;
   gameMap!: Array<Array<number>>;
-  gameFinished: boolean = false;
+  isGameFinished: boolean = false;
+
+  gameFinished$ = new Subject<boolean>();
 
   // Ghost Properties
   initGhostX!: number;
   initGhostY!: number;
   ghostMove: number = 2;
   isGhostMoving: boolean = false;
-  slowMovementIntervalG:any;
+  slowMovementIntervalG: any;
   ghostSpeed: number = 100;
-
 
   //Blue Ghost Properties
   initGhostBlueX!: number;
   initGhostBlueY!: number;
   isBlueGhostMoving: boolean = false;
-  movementIntervalForBlue:any;
+  movementIntervalForBlue: any;
   ghostBleMove: number = 2;
 
   constructor(private services: GameService) {
@@ -37,7 +39,8 @@ export class GhostService {
         if (map[i][j] === 3) {
           this.initGhostX = i;
           this.initGhostY = j;
-        }if (map[i][j] === 6) {
+        }
+        if (map[i][j] === 6) {
           this.initGhostBlueX = i;
           this.initGhostBlueY = j;
         }
@@ -73,6 +76,13 @@ export class GhostService {
     if (nextCells == this.wall) {
       // Hit a wall, change movement randomly;
       this.changeGhostDirection(randomNum);
+    } else if (nextCells == 5) {
+      // this.ghostMove = 55
+      clearInterval(this.slowMovementIntervalG);
+      clearInterval(this.movementIntervalForBlue);
+      this.isGhostMoving = false;
+      this.isBlueGhostMoving = false;
+      this.setIsGameFinished(true)
     } else {
       // Move ghost to next cell
       this.initGhostX = nextX;
@@ -109,6 +119,12 @@ export class GhostService {
     if (nextCellsBlue == this.wall) {
       // Hit a wall, change movement randomly;
       this.changeBlueGhostDirection(randomNumForBlue)
+    } else if (nextCellsBlue == 5) {
+      clearInterval(this.slowMovementIntervalG);
+      clearInterval(this.movementIntervalForBlue);
+      this.isGhostMoving = false;
+      this.isBlueGhostMoving = false;
+      this.setIsGameFinished(true)
     } else {
       // Move ghost to next cell
       this.initGhostBlueX = nextBlueX;
@@ -131,11 +147,10 @@ export class GhostService {
       // If the next cell is a road (2), move the ghost to that cell
       this.gameMap[nextX][nextY] = 3;
       this.gameMap[oldX][oldY] = 2;
-    }  else if (nextCellValue === 5) {
+    } else if (nextCellValue === 5) {
       // If the next cell is a Pac-Man (5), stop the game
       this.gameMap[nextX][nextY] = 3;
       this.gameMap[oldX][oldY] = 2;
-      this.gameFinished = true;
     } else {
       // If the next cell is not an empty cell or a coin cell or a road cell, do not move the ghost
       // and leave the old cell as it is
@@ -185,6 +200,15 @@ export class GhostService {
   changeBlueGhostDirection(direction: number) {
     this.ghostBleMove = direction;
     this.startBlueGhostMovement();
+  }
+
+  setIsGameFinished(value: boolean): void {
+    this.isGameFinished = value;
+    this.gameFinished$.next(value);
+  }
+
+  getIsGameFinished(): boolean {
+    return this.isGameFinished;
   }
 
 }

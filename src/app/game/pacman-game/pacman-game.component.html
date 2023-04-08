@@ -1,5 +1,5 @@
 <div class="main-container">
-  <h1 style="color: #FFFFFF">Total Score {{ totalScore }} {{getGhostNumber()}}</h1>
+  <h1 style="color: #FFFFFF">Total Score {{ totalScore }}</h1>
   <section class="game-section">
     <div class="row" *ngFor="let row of gameMap; let i = index">
       <div
@@ -26,7 +26,7 @@
                 : pacmanMove === 4
                 ? 'url(' + '/assets/images/pacman-left.png' + ')'
                 : pacmanMove === 5
-                ? 'url(' + '/assets/gifs/pacman-eating.gif' + ')'
+                ? 'url(' + '/assets/images/pacman-die-1.png' + ')'
                 : ''
               :
               block === 3
