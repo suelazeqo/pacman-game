@@ -1,91 +1,17 @@
-.main-container {
+:host{
   display: flex;
   flex-direction: column;
-  justify-content: center;
   align-items: center;
+  justify-content: center;
+  flex: 1 0 auto;
   background-color: black;
-  padding: 80px;
 }
-
-.game-section {
-  /*outline: dotted rebeccapurple;*/
-  /*text-align: center;*/
-  background-image: url("src/assets/images/sprite-sheet.v2.png");
-  background-repeat: no-repeat;
-  background-size: 100% 100%;
-}
-
-.block {
-  width: 25px;
-  height: 25px;
-  display: inline-block;
-  margin: -2px -2px -2px 2px;
-}
-
-.pacman {
-  background-image: url("src/assets/images/pacman-right.png");
-  background-size: 100% 100%;
-  background-repeat: no-repeat;
-}
-
-.coin {
-  background-image: url("src/assets/images/coin.png");
-  background-size: 25% 25%;
-  background-repeat: no-repeat;
-  background-position: center;
-}
-
-.bonus-coin {
-  background-image: url("src/assets/images/coin.png");
-  background-size: 60% 60%;
-  background-repeat: no-repeat;
-  background-position: center;
-}
-
-.wall {
-  /*background-image: url("../assets/images/wall.png");*/
-  background-size: 100% 100%;
-  background-repeat: no-repeat;
-}
-
-.road {
-  background-size: 100% 100%;
-}
-
-.ghostPink {
-  background-image: url("src/assets/images/pink-ghost-right.png");
-  background-size: 100% 100%;
-  background-repeat: no-repeat;
-}
-
-.ghost-blue {
-  background-image: url("src/assets/images/ghost_blue.png");
-  background-size: 100% 100%;
-  background-repeat: no-repeat;
-}
-
-.ghost-orange {
-  background-image: url("src/assets/images/ghost_orange.png");
-  background-size: 100% 100%;
-  background-repeat: no-repeat;
-}
-
-/*.ghost-red {*/
-/*  background-image: url("src/assets/images/life_red.png");*/
-/*  background-size: 100% 100%;*/
-/*  background-repeat: no-repeat;*/
-/*}*/
-
-
 
 .form-style{
   display: flex;
   flex-direction: column;
   gap: 10px;
 }
-/*button{*/
-/*  margin: 15px 0;*/
-/*}*/
 
 form {
   display: flex;
