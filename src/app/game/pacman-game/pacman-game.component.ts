@@ -4,6 +4,7 @@ import {GhostService} from "../ghost.service";
 import {Subscription} from "rxjs";
 import {PopupDialogComponent} from "../../popup/popup-dialog/popup-dialog.component";
 import {Router} from "@angular/router";
+import {FirebaseService} from "../../services/firebase.service";
 
 @Component({
   selector: 'app-pacman-game',
@@ -50,7 +51,8 @@ export class PacmanGameComponent implements OnInit{
 
   constructor(private services: GameService,
               private ghostService: GhostService,
-              private router: Router) {
+              private router: Router,
+              private firebaseService: FirebaseService) {
     document.title = this.title;
     this.gameMap = services.map;
   }
@@ -233,8 +235,11 @@ export class PacmanGameComponent implements OnInit{
 
   submit() {
     this.modal.hide();
-    console.log(this.username)
+    let id = Math.random().toString() ;
     this.router.navigate(['/'])
+    this.firebaseService.addNewUser(id, this.username,this.totalScore)
   }
+
+
 
 }

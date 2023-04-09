@@ -12,10 +12,10 @@
 
 .button-start {
   appearance: none;
-  background-color: #FFFFFF;
+  background-color: #ECDBBA;
   border-radius: 40em;
   border-style: none;
-  box-shadow: #ADCFFF 0 -12px 6px inset;
+  box-shadow: rgba(255, 99, 20, 0.71) 0 -6px 8px inset;
   box-sizing: border-box;
   color: #000000;
   cursor: pointer;
@@ -27,7 +27,6 @@
   margin: 0;
   outline: none;
   padding: 1rem 1.3rem;
-  quotes: auto;
   text-align: center;
   text-decoration: none;
   transition: all .15s;
@@ -37,8 +36,8 @@
 }
 
 .button-start:hover {
-  background-color: #FFC229;
-  box-shadow: #FF6314 0 -6px 8px inset;
+  background-color: #FFA372;
+  box-shadow: rgba(255, 99, 20, 0.71) 0 -6px 8px inset;
   transform: scale(1.125);
 }
 

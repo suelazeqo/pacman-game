@@ -10,6 +10,10 @@ import { PopupDialogComponent } from './popup/popup-dialog/popup-dialog.componen
 import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
 import {FormsModule} from "@angular/forms";
 
+import { AngularFireModule } from "@angular/fire/compat";
+import {AngularFirestoreModule} from "@angular/fire/compat/firestore";
+import { environment } from "../environments/environment";
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -22,7 +26,9 @@ import {FormsModule} from "@angular/forms";
     BrowserModule,
     BrowserAnimationsModule,
     AppRoutingModule,
-    FormsModule
+    FormsModule,
+    AngularFireModule.initializeApp(environment.firebaseConfig),
+    AngularFirestoreModule,
   ],
   providers: [],
   bootstrap: [AppComponent]

@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import {FirebaseService} from "../../services/firebase.service";
 
 @Component({
   selector: 'app-leaderboard',
@@ -6,21 +7,19 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./leaderboard.component.css']
 })
 export class LeaderboardComponent implements OnInit {
-  players=[
-    {username:'Suela', score:'12555'},
-    {username:'Suela', score:'12555'},
-    {username:'Suela', score:'12555'},
-    {username:'Suela', score:'12555'},
-    {username:'Suela', score:'12555'},
-    {username:'Suela', score:'12555'},
-    {username:'Suela', score:'12555'},
-    {username:'Suela', score:'12555'},
-    {username:'Suela', score:'12555'},
-    {username:'Suela', score:'12555'}
-  ];
-  constructor() { }
+  players:any;
+
+  constructor(private firebaseService: FirebaseService) { }
 
   ngOnInit(): void {
+    this.getUsers().then()
   }
 
+  // This method takes the users form firebase and sort the players by score in descending order,
+  // after take the first 10 players
+  async getUsers() {
+    this.players = await this.firebaseService.getAllUsers();
+    this.players.sort((a:any, b:any) => b.score - a.score);
+    this.players = this.players.slice(0, 10);
+  }
 }
