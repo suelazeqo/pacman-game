@@ -13,6 +13,7 @@ import {FormsModule} from "@angular/forms";
 import { AngularFireModule } from "@angular/fire/compat";
 import {AngularFirestoreModule} from "@angular/fire/compat/firestore";
 import { environment } from "../environments/environment";
+import { GameVersion2Component } from './game/game-version2/game-version2.component';
 
 @NgModule({
   declarations: [
@@ -20,7 +21,8 @@ import { environment } from "../environments/environment";
     PacmanGameComponent,
     HomeComponent,
     LeaderboardComponent,
-    PopupDialogComponent
+    PopupDialogComponent,
+    GameVersion2Component
   ],
   imports: [
     BrowserModule,

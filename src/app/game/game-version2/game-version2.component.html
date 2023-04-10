@@ -1,0 +1,15 @@
+<div class="main-container">
+  <h1 style="color: #FFFFFF">Total Score {{ totalScore }}</h1>
+  <app-popup-dialog #modal>
+    <h2>Save your score!</h2>
+    <form #form="ngForm">
+      <div class="form-style">
+        <label for="username">Username:</label>
+        <input type="text" id="username" name="username" [(ngModel)]="username" required>
+      </div>
+      <button  type="submit" (click)="submit()" [disabled]="form.invalid" >Continue</button>
+    </form>
+  </app-popup-dialog>
+</div>
+<canvas #canvasPacman class="canvas_pacman"></canvas>
+
