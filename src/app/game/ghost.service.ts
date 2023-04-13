@@ -10,7 +10,6 @@ export class GhostService {
   wall: number = 0;
   gameMap!: Array<Array<number>>;
   isGameFinished: boolean = false;
-
   gameFinished$ = new Subject<boolean>();
 
   // Ghost Properties
@@ -49,8 +48,6 @@ export class GhostService {
         }
       }
     }
-    console.log(this.initGhostX, this.initGhostY)
-    console.log(this.initGhostBlueX, this.initGhostBlueY)
   }
 
   // Move ghost in random direction
@@ -78,8 +75,8 @@ export class GhostService {
         break;
     }
     let nextCells = this.gameMap[nextX][nextY];
+    // Hit a wall or a ghost, change movement randomly;
     if (nextCells == this.wall ||nextCells === 6) {
-      // Hit a wall, change movement randomly;
       this.changeGhostDirection(randomNum);
     } else if (nextCells == 5) {
       clearInterval(this.slowMovementIntervalG);
@@ -120,8 +117,8 @@ export class GhostService {
         break;
     }
     let nextCellsBlue = this.gameMap[nextBlueX][nextBlueY];
+    // Hit a wall or a ghost, change movement randomly;
     if (nextCellsBlue == this.wall|| nextCellsBlue === 3) {
-      // Hit a wall, change movement randomly;
       this.changeBlueGhostDirection(randomNumForBlue)
     } else if (nextCellsBlue == 5) {
       clearInterval(this.slowMovementIntervalG);
@@ -137,6 +134,8 @@ export class GhostService {
     }
   }
 
+  // Replace the coordinate of the next cell with a Ghost
+  // and keep the old cell as it was before to face a ghost
   ghostMoved(nextX: any, nextY: any, oldX: any, oldY: any) {
     this.gameMap[oldX][oldY] = this.storedValuePink;
     const nextCellValue = this.gameMap[nextX][nextY];
@@ -144,6 +143,8 @@ export class GhostService {
     this.storedValuePink = nextCellValue;
   }
 
+  // Replace the coordinate of the next cell with a Ghost
+  // and keep the old cell as it was before to face a ghost
   ghostBlueMoved(nextX: any, nextY: any, oldX: any, oldY: any) {
     this.gameMap[oldX][oldY] = this.storedValueBlue;
     const nextCellValue = this.gameMap[nextX][nextY];
