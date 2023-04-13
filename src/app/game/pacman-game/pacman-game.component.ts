@@ -11,7 +11,7 @@ import {FirebaseService} from "../../services/firebase.service";
   templateUrl: './pacman-game.component.html',
   styleUrls: ['./pacman-game.component.css']
 })
-export class PacmanGameComponent implements OnInit{
+export class PacmanGameComponent implements OnInit {
 
   title = 'Pacman Game';
   totalScore: number = 0;
@@ -40,11 +40,17 @@ export class PacmanGameComponent implements OnInit{
   firstMovementInterval: any;
   secondMovementInterval: any;
   isMoving: boolean = false;
-  slowMovementSpeed: number = 500;
+  slowMovementSpeed: number = 200;
 
   //Ghost eat Pocman, receive information form ghost service
   isLevelFinished!: boolean;
   levelFinishedSubscription!: Subscription;
+
+  initGhostX!: number;
+  initGhostY!: number;
+  initGhostBlueX!: number;
+  initGhostBlueY!: number;
+  arrLives = [];
 
   @ViewChild('modal') modal!: PopupDialogComponent;
   username: string = '';
@@ -58,8 +64,14 @@ export class PacmanGameComponent implements OnInit{
   }
 
   ngOnInit() {
-    let map = this.gameMap;
+    this.initializeComponent();
+    this.ghostService.startGhostMovement();
+    this.ghostService.startBlueGhostMovement();
 
+  }
+
+  initializeComponent() {
+    let map = this.gameMap;
     //Initial pacman coordinate (20,8)
     for (let i = 0; i < map.length; i++) {
       for (let j = 0; j < map[i]['length']; j++) {
@@ -70,22 +82,28 @@ export class PacmanGameComponent implements OnInit{
       }
     }
 
-    // Init ghost random movement
-    this.ghostService.startGhostMovement();
-    this.ghostService.startBlueGhostMovement();
-
     //Ghost eat Pocman, receive information form ghost service
     this.isLevelFinished = this.ghostService.getIsGameFinished();
     this.levelFinishedSubscription = this.ghostService.gameFinished$.subscribe(
       (value) => {
-        this.isLevelFinished = value;
-        this.gameStarted = false;
-        this.pacmanDies();
-        setTimeout(()=>{
-          this.showModal();
-        },1000)
+        if (value) {
+          console.log(this.lives)
+          this.lives--;
+          if (this.lives > 0) {
+            this.pacmanMove = 5;
+            this.respawnPacman();
+          } else {
+            setTimeout(() => {
+              this.showModal();
+            }, 1000)
+          }
+        }
       }
     );
+  }
+
+  respawnPacman() {
+    this.startPocmanMovement()
   }
 
   // Return the pink ghost move
@@ -113,11 +131,11 @@ export class PacmanGameComponent implements OnInit{
         nextY--;
         break;
     }
-    if (nextY >18){
+    if (nextY > 18) {
       console.log(nextY)
       nextY = 0;
     }
-    if(nextY < 0){
+    if (nextY < 0) {
       nextY = 18
     }
     let nextCell = this.gameMap[nextX][nextY];
@@ -143,12 +161,12 @@ export class PacmanGameComponent implements OnInit{
         this.movePacman();
       }, this.slowMovementSpeed);
 
-      if (this.secondLive) {
-        console.log('second interval started')
-        this.secondMovementInterval = setInterval(() => {
-          this.movePacman();
-        }, this.slowMovementSpeed);
-      }
+      // if (this.secondLive) {
+      //   console.log('second interval started')
+      //   this.secondMovementInterval = setInterval(() => {
+      //     this.movePacman();
+      //   }, this.slowMovementSpeed);
+      // }
     }
   }
 
@@ -172,26 +190,27 @@ export class PacmanGameComponent implements OnInit{
       case 37: // Left Arrow Key
         this.changeDirection(4);
         this.gameStarted = true;
-        this.ghostService.moveGhostRandomly();
-        this.ghostService.moveBlueGhostRandomly();
+        this.ghostService.startGhostMovement();
+        this.ghostService.startBlueGhostMovement();
         break;
       case 38: // Up Arrow Key
         this.changeDirection(1);
         this.gameStarted = true;
-        this.ghostService.moveGhostRandomly();
-        this.ghostService.moveBlueGhostRandomly();
+        this.ghostService.startGhostMovement();
+        this.ghostService.startBlueGhostMovement();
         break;
       case 39: // Right Arrow Key
         this.changeDirection(2);
         this.gameStarted = true;
-        this.ghostService.moveGhostRandomly();
-        this.ghostService.moveBlueGhostRandomly();
+        this.ghostService.startGhostMovement();
+        this.ghostService.startBlueGhostMovement();
+        ;
         break;
       case 40: // Down Arrow Key
         this.changeDirection(3);
         this.gameStarted = true;
-        this.ghostService.moveGhostRandomly();
-        this.ghostService.moveBlueGhostRandomly();
+        this.ghostService.startGhostMovement();
+        this.ghostService.startBlueGhostMovement();
         break;
       default:
         // Stop all movement if any other key is pressed
@@ -204,26 +223,6 @@ export class PacmanGameComponent implements OnInit{
   pacmanMoved(nextX: any, nextY: any, oldX: any, oldY: any) {
     this.gameMap[nextX][nextY] = 5; // Moving Pacman around with arrow keys
     this.gameMap[oldX][oldY] = 2; //Replacing the pacman with empty road
-  }
-
-  // If pacman meet a ghost he dies (not finished)
-  pacmanDies() {
-    // console.log('Pocman Dies', this.lives, 'second live : ', this.secondLive, "Game Started", this.gameStarted)
-    // Pacman Die for first time
-    this.pacmanMove = 5;
-    // this.stopPacman();
-    // Remove one live from pacman lives
-    // this.lives -= 1;
-    // // Check if there are more lives, if yes restart the game
-    // if(this.lives = 2){
-    //   this.secondLive = true;
-    // }else if(this.lives = 1){
-    //   this.thirdLive = true;
-    // }
-    // else{
-    //   this.gameOver = true;
-    // }
-    // console.log('Pocman Dies', this.lives, 'second live : ', this.secondLive)
   }
 
   //update the score by adding points for any coin and big coin
@@ -241,11 +240,10 @@ export class PacmanGameComponent implements OnInit{
 
   submit() {
     this.modal.hide();
-    let id = Math.random().toString() ;
+    let id = Math.random().toString();
     this.router.navigate(['/'])
-    this.firebaseService.addNewUser(id, this.username,this.totalScore)
+    this.firebaseService.addNewUser(id, this.username, this.totalScore)
   }
-
 
 
 }
