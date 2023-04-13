@@ -28,6 +28,9 @@ export class GhostService {
   movementIntervalForBlue: any;
   ghostBleMove: number = 2;
 
+  storedValueBlue = 1;
+  storedValuePink = 2;
+
   constructor(private services: GameService) {
 
     this.gameMap = services.map;
@@ -98,6 +101,8 @@ export class GhostService {
     let oldBlueX = this.initGhostBlueX;
     let oldBlueY = this.initGhostBlueY;
 
+    console.log(nextBlueX, nextBlueY, " 1 ", oldBlueX, oldBlueY)
+
     //Create a random number form 1 to 4
     let randomNumForBlue = Math.floor(Math.random() * 4) + 1;
 
@@ -129,6 +134,7 @@ export class GhostService {
       // Move ghost to next cell
       this.initGhostBlueX = nextBlueX;
       this.initGhostBlueY = nextBlueY;
+      console.log(nextBlueX, nextBlueY, " 2 ", oldBlueX, oldBlueY);
       this.ghostBlueMoved(nextBlueX, nextBlueY, oldBlueX, oldBlueY);
     }
   }
@@ -138,30 +144,37 @@ export class GhostService {
     // this.gameMap[nextX][nextY] = 3;
     // this.gameMap[oldX][oldY] = nextCellValue;
 
+    // const nextCellValue = this.gameMap[nextX][nextY];
+    // if (nextCellValue === 1 || nextCellValue === 4) {
+    //   // If the next cell is a small coin (1) or a big coin (4), move the ghost to that cell
+    //   this.gameMap[nextX][nextY] = 3;
+    //   this.gameMap[oldX][oldY] = nextCellValue;
+    // } else if (nextCellValue === 2) {
+    //   // If the next cell is a road (2), move the ghost to that cell
+    //   this.gameMap[nextX][nextY] = 3;
+    //   this.gameMap[oldX][oldY] = 2;
+    // } else if (nextCellValue === 5) {
+    //   // If the next cell is a Pac-Man (5), stop the game
+    //   this.gameMap[nextX][nextY] = 3;
+    //   this.gameMap[oldX][oldY] = 2;
+    // } else {
+    //   // If the next cell is not an empty cell or a coin cell or a road cell, do not move the ghost
+    //   // and leave the old cell as it is
+    //   this.gameMap[oldX][oldY] = 3;
+    // }
+    this.gameMap[oldX][oldY] = this.storedValuePink;
     const nextCellValue = this.gameMap[nextX][nextY];
-    if (nextCellValue === 1 || nextCellValue === 4) {
-      // If the next cell is a small coin (1) or a big coin (4), move the ghost to that cell
-      this.gameMap[nextX][nextY] = 3;
-      this.gameMap[oldX][oldY] = nextCellValue;
-    } else if (nextCellValue === 2) {
-      // If the next cell is a road (2), move the ghost to that cell
-      this.gameMap[nextX][nextY] = 3;
-      this.gameMap[oldX][oldY] = 2;
-    } else if (nextCellValue === 5) {
-      // If the next cell is a Pac-Man (5), stop the game
-      this.gameMap[nextX][nextY] = 3;
-      this.gameMap[oldX][oldY] = 2;
-    } else {
-      // If the next cell is not an empty cell or a coin cell or a road cell, do not move the ghost
-      // and leave the old cell as it is
-      this.gameMap[oldX][oldY] = 3;
-    }
+    this.gameMap[nextX][nextY] = 3;
+    // this.gameMap[oldX][oldY] = nextCellValue;
+    this.storedValuePink = nextCellValue
   }
 
   ghostBlueMoved(nextX: any, nextY: any, oldX: any, oldY: any) {
+    this.gameMap[oldX][oldY] = this.storedValueBlue;
     const nextCellValue = this.gameMap[nextX][nextY];
     this.gameMap[nextX][nextY] = 6;
-    this.gameMap[oldX][oldY] = nextCellValue;
+    // this.gameMap[oldX][oldY] = nextCellValue;
+    this.storedValueBlue = nextCellValue
   }
 
   // Start Pink Ghost movement interval

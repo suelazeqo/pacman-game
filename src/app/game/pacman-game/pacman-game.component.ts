@@ -70,9 +70,9 @@ export class PacmanGameComponent implements OnInit{
       }
     }
 
-    //Init ghost random movement
-    // this.ghostService.moveGhostRandomly();
-    // this.ghostService.moveBlueGhostRandomly();
+    // Init ghost random movement
+    this.ghostService.moveGhostRandomly();
+    this.ghostService.moveBlueGhostRandomly();
 
     //Ghost eat Pocman, receive information form ghost service
     this.isLevelFinished = this.ghostService.getIsGameFinished();
